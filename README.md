@@ -1,7 +1,7 @@
 
 # Tailwind is an interesting framework because instead of providing a set of widgets like Bootstrap or others, it provides utilities.
 
-## I find it resonates a lot with how I work with HTML.
+### I find it resonates a lot with how I work with HTML.
 
 ###I introduced how I use Tailwind with Vue in a previous post, but without a build tool in place already, it can be hard to get the correct setup right, and I decided to write this blog post even just for me to remember later on 🙃
 
