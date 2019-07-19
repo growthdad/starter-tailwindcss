@@ -1,30 +1,27 @@
 
 # Tailwind is an interesting framework because instead of providing a set of widgets like Bootstrap or others, it provides utilities.
 
-### I find it resonates a lot with how I work with HTML.
+I introduced how I use Tailwind with Vue in a previous post, but without a build tool in place already, it can be hard to get the correct setup right, and I decided to write this blog post even just for me to remember later on 🙃
+In this post I explain how to use Tailwind with any kind of project.
 
-###I introduced how I use Tailwind with Vue in a previous post, but without a build tool in place already, it can be hard to get the correct setup right, and I decided to write this blog post even just for me to remember later on 🙃
-
-###In this post I explain how to use Tailwind with any kind of project.
-
-###Install Tailwind
-###First step is to install Tailwind, using npm or yarn:
+### Install Tailwind
+First step is to install Tailwind, using npm or yarn:
 
 ```
 npm install tailwindcss
 ```
 
-###Create the configuration file
-###Next, use the Tailwind command that is provided to create a configuration file.
+### Create the configuration file
+Next, use the Tailwind command that is provided to create a configuration file.
 
 ```
 ./node_modules/.bin/tailwind init tailwind.js
 ```
 
-###This will create a tailwind.js file in the root of your project, adding the basic Tailwind configuration. The file is very long, and I won’t paste it here, but it contains lots of presets that will be very useful later.
+This will create a tailwind.js file in the root of your project, adding the basic Tailwind configuration. The file is very long, and I won’t paste it here, but it contains lots of presets that will be very useful later.
 
-###Configure PostCSS
-###Now you need to tweak the PostCSS configuration to make sure Tailwind runs. Add:
+### Configure PostCSS
+Now you need to tweak the PostCSS configuration to make sure Tailwind runs. Add:
 
 ```
 const tailwindcss = require('tailwindcss')
@@ -37,10 +34,10 @@ module.exports = {
 }
 ```
 
-###to your postcss.config.js. Create one if it does not exist.
+to your postcss.config.js. Create one if it does not exist.
 
-###Create the Tailwind CSS file
-###Now create a CSS file where you want, like in src/tailwind.css and add
+### Create the Tailwind CSS file
+Now create a CSS file where you want, like in src/tailwind.css and add
 
 ```
 @tailwind preflight;
@@ -48,8 +45,8 @@ module.exports = {
 @tailwind utilities;
 ```
 
-###Create the build command
-###Now open your package.json file, and add a scripts section if you don’t have it:
+### Create the build command
+Now open your package.json file, and add a scripts section if you don’t have it:
 
 ```
   "scripts": {
@@ -57,21 +54,21 @@ module.exports = {
   }
 ```
 
-###Build Tailwind
-###Now from the command line run npm run build:css will build the final CSS file.
+### Build Tailwind
+Now from the command line run npm run build:css will build the final CSS file.
 
-###The resulting file is in static/dist/tailwind.css (you can change the location in the above command).
+The resulting file is in static/dist/tailwind.css (you can change the location in the above command).
 
-###Trim the file size
-###If you check, the resulting file is huge. Even if you don’t use any Tailwind class in your HTML, all of the framework is included by default, because that’s the default configuration in the tailwind.js file.
+### Trim the file size
+If you check, the resulting file is huge. Even if you don’t use any Tailwind class in your HTML, all of the framework is included by default, because that’s the default configuration in the tailwind.js file.
 
-###They decided to include all, to avoid people missing things. It’s a design choice. We now need to remove stuff, and it turns out we can use purgecss to remove all the unused CSS classes.
+They decided to include all, to avoid people missing things. It’s a design choice. We now need to remove stuff, and it turns out we can use purgecss to remove all the unused CSS classes.
 
-###Warning: I realized (Jan 2019) that this approach does not work when classes are escaped (like it happens for w-1/2 for example or mg:-mb-6 because / and : are escaped with a \ in the CSS), so pay attention if you use those special characters that need to be escaped.
+Warning: I realized (Jan 2019) that this approach does not work when classes are escaped (like it happens for w-1/2 for example or mg:-mb-6 because / and : are escaped with a \ in the CSS), so pay attention if you use those special characters that need to be escaped.
 
-###I also want to remove all comments from the CSS and make it as small as possible. cssnano is what we’re looking for.
+I also want to remove all comments from the CSS and make it as small as possible. cssnano is what we’re looking for.
 
-###We can automate this stuff! First, install those utilities:
+We can automate this stuff! First, install those utilities:
 
 ```
 npm install cssnano
@@ -97,22 +94,19 @@ module.exports = {
 }
 ```
 
-###Automatically regenerate the CSS upon file changes
-###In my case I have a folder called layouts which contains all the HTML files that build up my site.
+### Automatically regenerate the CSS upon file changes
+In my case I have a folder called layouts which contains all the HTML files that build up my site.
+It’s the same folder I reference in the purgecss configuration above.
+Every time I change something in there, I want to regenerate the CSS, and trigger the purge and minification I set up.
 
-###It’s the same folder I reference in the purgecss configuration above.
-
-###Every time I change something in there, I want to regenerate the CSS, and trigger the purge and minification I set up.
-
-###How to do this?
-
-###Install the watch npm package:
+### How to do this?
+Install the watch npm package:
 
 ```
 npm install watch
 ```
 
-###and add the watch script to your package.json file. You already had build:css from before, we just add a script that watches the layouts folder and runs build:css upon every change:
+and add the watch script to your package.json file. You already had build:css from before, we just add a script that watches the layouts folder and runs build:css upon every change:
 
 ```
 "scripts": {
@@ -121,4 +115,4 @@ npm install watch
 }
 ```
 
-###Now run npm run watch and you should be good to go!
+Now run npm run watch and you should be good to go!
